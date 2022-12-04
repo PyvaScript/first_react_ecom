@@ -5,9 +5,9 @@ import { signInWithGooglePopup, createUserDocumentFromAuth, signInAuthUserWithEm
 import "./sign-in-form.styles.scss";
 
 const defaultFormFields={
-    email: '',
-    password: '',
-}
+    email: "",
+    password: "",
+};
 
 const SignInForm=()=>{
     const [formFields, setFormFields]=useState(defaultFormFields);
@@ -20,34 +20,31 @@ const SignInForm=()=>{
     const handleSubmit=async(event)=>{
         event.preventDefault();
         try {
-            const response=await signInAuthUserWithEmailAndPassword(email, password);
-            console.log(response);
+            const { user }=await signInAuthUserWithEmailAndPassword(email, password);
             resetFormFields();
         }catch(error) {
             switch(error.code) {
-                case 'auth/wrong-password':
+                case "auth/wrong-password":
                     alert("Incorrect password. Please try again");
                     break;
-                case 'auth/user-not-found':
-                    alert("Account not found");
+                case "auth/user-not-found":
+                    alert("Account not found. Please try again");
                     break;
                 default:
-                    console.log(error);
-            }
-            console.log(error);
+                    console.log("Error unknown",error);
+            };
         };
     };
 
     const handleChange=(event)=>{
         const { name, value }=event.target;
-        setFormFields({ ...formFields, [name]:value })
+        setFormFields({...formFields, [name]:value});
     };
 
     const signInWithGoogle=async()=>{
-        const { user }=await signInWithGooglePopup();
-        await createUserDocumentFromAuth(user);
+        await signInWithGooglePopup();
     };
-    
+
     return (
         <div className="sign-in-container">
             <h2>Already have an account?</h2>
@@ -71,11 +68,11 @@ const SignInForm=()=>{
                 />
                 <div className="buttons-container">
                     <Button type="submit">Sign In</Button>
-                    <Button buttonType="google" type="button" onClick={ signInWithGoogle }>Google Signin</Button>
+                    <Button buttonType="google" type="button" onClick={ signInWithGoogle }>Google Sign in</Button>
                 </div>
             </form>
         </div>
     )
-}
+};
 
 export default SignInForm;
