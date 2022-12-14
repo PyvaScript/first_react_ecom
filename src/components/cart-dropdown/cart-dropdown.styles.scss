@@ -18,7 +18,9 @@
         overflow: auto;
     }
 
-    button {
+    .checkout-button {
+        display: flex;
+        justify-content: center;
         margin-top: auto;
     }
     
