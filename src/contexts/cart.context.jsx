@@ -16,10 +16,11 @@ const reduceItemQuantity=(cartItems, productToReduce)=>{
 };
 
 const removeItemFromCart=(cartItems, productToRemove)=>{
-    cartItems.splice(0,1);
-    console.log("cartItems following splice are: ",cartItems);
-    return [cartItems.map((cartItem)=>cartItem.quantity=100)]
-}
+    cartItems.splice(cartItems.indexOf(cartItems.find(item=>item.id===productToRemove.id)),1);
+    console.log("cartItems following splice are: ",typeof(cartItems));
+    console.log("cartItems following splice are:",cartItems);
+    return cartItems;
+};
 
 export const CartContext=createContext({
     isCartOpen: false,
@@ -32,8 +33,7 @@ export const CartContext=createContext({
 
 export const CartProvider=({ children })=>{
     const [ isCartOpen, setIsCartOpen ]=useState(false);
-    const [cartItems, setCartItems ]=useState([]);
-    /*
+    //const [cartItems, setCartItems ]=useState([]);
     const [cartItems, setCartItems ]=useState([
         {
             "id":4,
@@ -43,9 +43,8 @@ export const CartProvider=({ children })=>{
             "quantity":1
         },
     ]);
-    */
     const [ cartCount, setCartCount ]=useState(0);
-    const [ totalPrice, setTotalPrice ]=useState(0);
+    const [ totalPrice, setTotalPrice ]=useState(cartItems.reduce((total,item)=>total+item.price*item.quantity,0));
 
     const addItemToCart=(productToAdd)=>{
         setCartItems(addCartItem(cartItems, productToAdd));
@@ -57,20 +56,14 @@ export const CartProvider=({ children })=>{
 
     const removeCartItem=(productToRemove)=>{
         const res=removeItemFromCart(cartItems, productToRemove);
-        console.log(res);
+        setCartItems(res);
     };
-
-
 
     useEffect(()=>{
         const newCartCount=cartItems.reduce((total, cartItem)=>total+cartItem.quantity,0);
         setCartCount(newCartCount);
+        setTotalPrice(cartItems.reduce((total,item)=>total+item.price*item.quantity,0));
     },[ cartItems ]);
-
-    useEffect(()=>{
-        const newTotalPrice=cartItems.reduce((total, cartItem)=>total+cartItem.price,0);
-        setTotalPrice(newTotalPrice);
-    },[cartItems]);
 
     /*
     MY SOLUTION
