@@ -10,7 +10,7 @@ const addCartItem=(cartItems, productToAdd)=>{
 
 const reduceItemQuantity=(cartItems, productToReduce)=>{
     if(productToReduce.quantity===1) {
-        alert("This product is going to be removed from the cart");
+        return cartItems.filter(item=>item!==productToReduce);
     };
     return cartItems.map((cartItem)=>cartItem.id===productToReduce.id?{ ...cartItem, quantity: cartItem.quantity-1 }:cartItem);
 };
@@ -60,10 +60,12 @@ export const CartProvider=({ children })=>{
     };
 
     useEffect(()=>{
-        const newCartCount=cartItems.reduce((total, cartItem)=>total+cartItem.quantity,0);
-        setCartCount(newCartCount);
+        setCartCount(cartItems.reduce((total,cartItem)=>total+cartItem.quantity,0));
+    },[cartItems]);
+
+    useEffect(()=>{
         setTotalPrice(cartItems.reduce((total,item)=>total+item.price*item.quantity,0));
-    },[ cartItems ]);
+    },[cartItems]);
 
     /*
     MY SOLUTION
