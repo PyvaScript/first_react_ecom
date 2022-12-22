@@ -6,7 +6,7 @@ import CartIcon from "../../components/cart-icon/cart-icon.component.jsx";
 import { ReactComponent as JetLogo } from "../../assets/crown.svg";
 import { signUserOut } from "../../utils/firebase/firebase.utils.js";
 import { UserContext } from "../../contexts/user.context.jsx";
-import "./navigation.styles.scss";
+import { NavigationContainer, LogoContainer, NavLinks, NavLink } from './navigation.styles.jsx';
 
 const Navigation=()=>{
     
@@ -15,23 +15,23 @@ const Navigation=()=>{
     
     return (
         <Fragment>
-            <div className="navigation">
-                <Link className="logo-container" to="/">
+            <NavigationContainer>
+                <LogoContainer to="/">
                     <JetLogo className="logo"/>
-                </Link>
-                <div className="nav-links-container">
-                    <Link className="nav-link" to="/shop">Shop</Link>
+                </LogoContainer>
+                <NavLinks>
+                    <NavLink to="/shop">Shop</NavLink>
                     {
                         currentUser ? (
-                            <span className="nav-link" onClick={ signUserOut }>SIGN OUT</span>
+                            <NavLink as="span" onClick={ signUserOut }>SIGN OUT</NavLink>
                         ):(
-                            <Link className="nav-link" to="/auth">SIGN IN</Link>
+                            <NavLink to="/auth">SIGN IN</NavLink>
                         )
                     }
                     <CartIcon />
                     { isCartOpen && <CartDropdown /> }
-                </div>
-            </div>
+                </NavLinks>
+            </NavigationContainer>
             <Outlet/>
         </Fragment>
     )

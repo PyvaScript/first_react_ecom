@@ -18,31 +18,23 @@ const CheckoutProduct=({ product })=>{
 
     const removeProduct=()=>{
         removeCartItem(product);
-    }
+    };
 
     return (
         <div key={ id } className="product-container">
-            <div className="product-section">
-                <img src={ imageUrl } alt={ `${ name }`}/>
+            <div className="product-image-container">
+                <img src={ imageUrl } alt={ `${ name }` }/>
             </div>
-            <div className="product-section">
-                <span>{ name }</span>
-            </div>
-            <div className="product-section">
-                <div className="product-quantity">
-                    <span onClick={ decreaseProductQuantity }>&#60;</span>
-                    <span>{ quantity }</span>
-                    <span onClick={ increaseProductQuantity }>&#62;</span>
-                </div>
-            </div>
-            <div className="product-section">
-                <span>{ price }</span>
-            </div>
-            <div className="product-section">
-                <span className="product-removal" onClick={ removeProduct }>X</span>
-            </div>
+            <span className="product-name">{ name }</span>
+            <span className='quantity'>
+                <div className="arrow" onClick={ decreaseProductQuantity }>&#60;</div>
+                <span className="value">{ quantity }</span>
+                <div className="arrow" onClick={ increaseProductQuantity }>&#62;</div>
+            </span>
+            <span class="price">{ price }</span>
+            <div className="remove-button" onClick={ removeProduct }>&#10005;</div>
         </div>
-    )
+    );
 };
 
 export default CheckoutProduct;
