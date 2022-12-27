@@ -35,7 +35,7 @@ const CheckoutProduct=({ product })=>{
                 <span className="value">{ quantity }</span>
                 <div className="arrow" onClick={ increaseProductQuantity }>&#62;</div>
             </ProductQuantity>
-            <span class="price">{ price }</span>
+            <span className="price">{ price }</span>
             <RemoveButton onClick={ removeProduct }>&#10005;</RemoveButton>
         </ProductContainer>
     );

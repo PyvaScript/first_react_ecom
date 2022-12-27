@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CartContext } from "../../contexts/cart.context.jsx";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component.jsx";
 import CartItem from "../cart-item/cart-item.component.jsx";
-import { CartDropdownContainer, CartItems, CartDropdownButton } from "./cart-dropdown.styles.jsx";
+import { CartDropdownContainer, CartItems, EmptyMessage, CartDropdownButton } from "./cart-dropdown.styles.jsx";
 //import { Link } from 'react-router-dom';
 
 const CartDropdown=()=>{
@@ -15,7 +15,12 @@ const CartDropdown=()=>{
     return (
         <CartDropdownContainer>
             <CartItems>
-                { cartItems.map(item=><CartItem key={ item.id } cartItem={ item }/>) }
+                { cartItems.length ? (
+                    cartItems.map(item=><CartItem key={ item.id } cartItem={ item }/>)
+                    ) : (
+                        <EmptyMessage>Your cart is emtpy</EmptyMessage>
+                    )
+                }
             </CartItems>
             <Button buttonType={ BUTTON_TYPE_CLASSES.base } onClick={ goToCheckoutHandler }>Checkout</Button>
             {
