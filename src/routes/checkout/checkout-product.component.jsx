@@ -19,7 +19,7 @@ const CheckoutProduct=({ product })=>{
     const decreaseProductQuantity=()=>{
         reduceCartItem(product);
     };
-
+    
     const removeProduct=()=>{
         removeCartItem(product);
     };

@@ -1,11 +1,11 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useReducer } from 'react';
 
 const addCartItem=(cartItems, productToAdd)=>{
     const existingCartItem=cartItems.find((cartItem)=>cartItem.id===productToAdd.id);
     if(existingCartItem) {
         return cartItems.map((cartItem)=>cartItem.id===productToAdd.id?{ ...cartItem, quantity: cartItem.quantity+1 }:cartItem);
     }
-    return [ ...cartItems, { ...productToAdd, quantity:1 }]
+    return [...cartItems, { ...productToAdd, quantity:1 }]
 };
 
 const reduceItemQuantity=(cartItems, productToReduce)=>{
@@ -27,9 +27,8 @@ export const CartContext=createContext({
 });
 
 export const CartProvider=({ children })=>{
-    const [ isCartOpen, setIsCartOpen ]=useState(false);
-    //const [cartItems, setCartItems ]=useState([]);
-    const [cartItems, setCartItems ]=useState([
+    const [isCartOpen, setIsCartOpen]=useState(false);
+    const [cartItems, setCartItems]=useState([
         {
             "id":40,
             "name":"Gulfstream G800",
@@ -38,8 +37,8 @@ export const CartProvider=({ children })=>{
             'quantity':2,
         }
     ]);
-    const [ cartCount, setCartCount ]=useState(0);
-    const [ totalPrice, setTotalPrice ]=useState(cartItems.reduce((total,item)=>total+item.price*item.quantity,0));
+    const [cartCount, setCartCount]=useState(0);
+    const [totalPrice, setTotalPrice]=useState(cartItems.reduce((total,item)=>total+item.price*item.quantity,0));
 
     const addItemToCart=(productToAdd)=>{
         setCartItems(addCartItem(cartItems, productToAdd));
@@ -60,7 +59,7 @@ export const CartProvider=({ children })=>{
 
     useEffect(()=>{
         setTotalPrice(cartItems.reduce((total,item)=>total+item.price*item.quantity,0));
-    },[cartItems]);
+    },[cartItems])
 
     /*
     MY SOLUTION
@@ -73,6 +72,17 @@ export const CartProvider=({ children })=>{
     };
     */
 
-    const value={ isCartOpen, setIsCartOpen, addItemToCart, reduceCartItem, removeCartItem, cartItems, setCartItems, cartCount, totalPrice};
-    return <CartContext.Provider value={ value }>{ children }</CartContext.Provider>
+    const value={
+        isCartOpen,
+        setIsCartOpen,
+        addItemToCart,
+        reduceCartItem,
+        removeCartItem,
+        cartItems,
+        setCartItems,
+        cartCount,
+        totalPrice
+    };
+
+    return <CartContext.Provider value={  value }>{ children }</CartContext.Provider>
 };
