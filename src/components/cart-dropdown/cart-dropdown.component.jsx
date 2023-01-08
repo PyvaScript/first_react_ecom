@@ -7,10 +7,10 @@ import { CartDropdownContainer, CartItems, EmptyMessage, CartDropdownButton } fr
 //import { Link } from 'react-router-dom';
 
 const CartDropdown=()=>{
-    const { isCartOpen, cartItems, toggleIsCartOpen }=useContext(CartContext);
+    const { isCartOpen, cartItems, setIsCartOpen }=useContext(CartContext);
     const navigate=useNavigate();
     const goToCheckoutHandler=()=>{
-        toggleIsCartOpen(isCartOpen)
+        setIsCartOpen(false)
         navigate("/checkout");
     };
     return (

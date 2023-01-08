@@ -4,10 +4,17 @@ import { ShoppingIcon, CartIconContainer, ItemCount} from "./cart-icon.styles.js
 
 const CartIcon=()=>{
 
+    /*
+    MY SOLUTION FOR TOGGLING THE DROPDOWN CART
     const { isCartOpen, setIsCartOpen, cartCount, toggleIsCartOpen }=useContext(CartContext);
+    */
+
+    const { isCartOpen, setIsCartOpen, cartCount }=useContext(CartContext);
 
 
     /*
+
+    My first solution to toggling the dropdown cart
 
     const toggleDropdownDisplay=()=>{
         dropdownOpen==false ? (
@@ -17,14 +24,20 @@ const CartIcon=()=>{
         )
     };
 
-    */
+    My second solution for the dropdown cart
+
+    SIMPLY ADD toggleCartDropdown TO THE ONCLICK ATTRIBUTE FOR THE CARTICONCONTAINER COMPONENT
 
     const toggleCartDropdown=()=>{
         toggleIsCartOpen(isCartOpen);
     };
 
+    */
+
+    const toggleIsCartOpen=()=> setIsCartOpen(!isCartOpen);
+
     return (
-        <CartIconContainer onClick={ toggleCartDropdown }>
+        <CartIconContainer onClick={ toggleIsCartOpen }>
             <ShoppingIcon className="shopping-icon" />
             <ItemCount>{ cartCount }</ItemCount>
         </CartIconContainer>

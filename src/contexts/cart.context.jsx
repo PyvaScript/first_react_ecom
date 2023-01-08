@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, useReducer } from 'react';
 
+import { createAction } from '../utils/reducer/reducer.utils.js';
+
 const addCartItem=(cartItems, productToAdd)=>{
     const existingCartItem=cartItems.find((cartItem)=>cartItem.id===productToAdd.id);
     if(existingCartItem) {
@@ -26,6 +28,12 @@ export const CartContext=createContext({
     totalPrice: 0,
 });
 
+const CART_ACTION_TYPES={
+    SET_CART_ITEMS:'SET_CART_ITEMS',
+    SET_IS_CART_OPEN:"SET_IS_CART_OPEN",
+};
+
+//Does the the code below work because of variable redeclaration??
 const INITIAL_STATE={
     isCartOpen: false,
     cartItems: [],
@@ -37,16 +45,24 @@ const cartReducer=(state, action)=>{
     const { type, payload }=action;
 
     switch(type) {
-        case 'SET_CART_ITEMS':
+        case CART_ACTION_TYPES.SET_CART_ITEMS:
             return {
                 ...state,
                 ...payload,
-            }
+            };
+        case CART_ACTION_TYPES.SET_IS_CART_OPEN:
+            return {
+                ...state,
+                isCartOpen: payload
+            };
+        /*
+        My solution to the dropdown cart toggle issue continues below
         case "SET_CART_OPEN":
             return {
                 ...state,
                 ...payload,
             };
+        */
         default:
             throw new Error(`Unhandled type ${ type } in cartReducer`);
     };
@@ -83,12 +99,19 @@ export const CartProvider=({ children })=>{
     const updateCartItemsReducer=(newCartItems)=>{
         const newCartCount=newCartItems.reduce((total, item)=>total+item.quantity,0);
         const newTotalPrice=newCartItems.reduce((total, item)=>total+item.price*item.quantity,0);
-        dispatch({ type: 'SET_CART_ITEMS', payload: { cartItems:newCartItems, totalPrice: newTotalPrice, cartCount: newCartCount } })
+        dispatch(createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
+            cartItems:newCartItems,
+            totalPrice:newTotalPrice,
+            cartCount:newCartCount
+        }));
     };
 
+    /*
+    Additional part of my solution for the cart dropdown toggle
     const updateIsCartOpenReducer=(newIsCartOpen)=>{
         dispatch({ type: 'SET_CART_OPEN', payload: { isCartOpen: newIsCartOpen } })
     };
+    */
 
     const addItemToCart=(productToAdd)=>{
         const newCartItems=addCartItem(cartItems, productToAdd);
@@ -105,10 +128,19 @@ export const CartProvider=({ children })=>{
         updateCartItemsReducer(newCartItems);
     };
 
+    //Tutorial solution to toggling the dropdown cart is below.
+    //I will use the tutorial solution in this application to avoid any conflic of variables and usage in the future
+    const setIsCartOpen=(bool)=>{
+        dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN,bool));
+    };
+
+    /*
+    MY SOLUTION TO TOGGLING THE DROPDOWN CART
     const toggleIsCartOpen=(cartOpen)=>{
         const newIsCartOpen=!cartOpen;
         updateIsCartOpenReducer(newIsCartOpen);
     };
+    */
 
     /*
     MY SOLUTION
@@ -123,12 +155,12 @@ export const CartProvider=({ children })=>{
 
     const value={
         isCartOpen,
-        setIsCartOpen: ()=>{},
+        setIsCartOpen,
         //Create the above function to update the reducer appropriately
         addItemToCart,
         reduceCartItem,
         removeCartItem,
-        toggleIsCartOpen,
+        //toggleIsCartOpen,
         cartItems,
         cartCount,
         totalPrice
